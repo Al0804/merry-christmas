@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .bells {
+            position: fixed;
+            top: 20px;
+            width: 80px;
+            height: 80px;
+            animation: swing 2s infinite ease-in-out;
+            font-size: 60px;
+            z-index: 2;
+        }
+
+        .bell-left {
+            left: 20px;
+        }
+
+        .bell-right {
+            right: 20px;
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-15deg); }
+            50% { transform: rotate(15deg); }
+        }
+
+        .christmas-tree {
+            width: 300px;
+            height: 400px;
+            margin-top: 120px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Tambahkan URL gambar pohon natal di sini */
+            background-image: url('R.gif');
+        }
+
+        .message {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .names {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+        }
+
+        .greeting {
+            font-size: 32px;
+            font-weight: bold;
+            opacity: 0;
+            animation: colorChange 3s infinite, fadeIn 2s forwards;
+            text-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes colorChange {
+            0% { color: #ff4444; }
+            25% { color: #44ff44; }
+            50% { color: #4444ff; }
+            75% { color: #ffff44; }
+            100% { color: #ff4444; }
+        }
+
+        .firework {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px 2px;
+        }
+
+        @media (max-width: 600px) {
+            .christmas-tree {
+                width: 200px;
+                height: 300px;
+            }
+
+            .bells {
+                width: 50px;
+                height: 50px;
+                font-size: 40px;
+            }
+
+            .greeting {
+                font-size: 24px;
+            }
+
+            .names {
+                font-size: 16px;
+                .message {
+                    margin-top: 20px;
+                    padding: 0 10px; /* Menambahkan padding untuk ruang di sisi */
+                }
+            
+                .audio-control {
+                    bottom: 10px; /* Mengurangi jarak dari bawah */
+                    right: 10px; /* Mengurangi jarak dari kanan */
+                    padding: 8px; /* Mengurangi padding */
+                }
+                @media (max-width: 480px) {
+                    .christmas-tree {
+                        width: 180px; /* Ukuran pohon natal lebih kecil */
+                        height: 250px; /* Tinggi pohon natal lebih kecil */
+                    }
+                
+                    .bells {
+                        width: 40px; /* Ukuran lonceng lebih kecil */
+                        height: 40px; /* Tinggi lonceng lebih kecil */
+                        font-size: 30px; /* Ukuran font lonceng lebih kecil */
+                    }
+                
+                    .greeting {
+                        font-size: 20px; /* Ukuran font ucapan lebih kecil */
+                    }
+                
+                    .names {
+                        font-size: 14px; /* Ukuran font nama lebih kecil */
+                    }
+                
+                    .message {
+                        margin-top: 15px; /* Mengurangi margin atas */
+                        padding: 0 5px; /* Mengurangi padding untuk ruang di sisi */
+                    }
+                
+                    .audio-control {
+                        bottom: 5px; /* Mengurangi jarak dari bawah */
+                        right: 5px; /* Mengurangi jarak dari kanan */
+                        padding: 6px; /* Mengurangi padding */
+                    }
+                }
+            
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bells bell-left">🔔</div>
+    <div class="bells bell-right">🔔</div>
+    
+    <div class="christmas-tree"></div>
+    
+    <div class="message">
+        <div class="names">Untuk Bapak Darjoto Setyawan & Ibu Felissa Tjan</div>
+        <div class="greeting">Merry Christmas & Happy New Year</div>
+    </div>
+
+    <div class="audio-control" onclick="toggleMusic()">🔊</div>
+
+    <audio id="bgMusic" loop autoplay>
+        <!-- Tambahkan URL audio di sini -->
+        <source src="oke.mp3" type="audio/mp3">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                document.querySelector('.audio-control').innerHTML = '🔈';
+            } else {
+                audio.play();
+                document.querySelector('.audio-control').innerHTML = '🔊';
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight;
+            
+            firework.style.left = startX + 'px';
+            firework.style.bottom = '0';
+            
+            const colors = [
+                '#ff0000', '#00ff00', '#0000ff', 
+                '#ffff00', '#ff00ff', '#00ffff',
+                '#ff8800', '#ff0088', '#88ff00',
+                '#ffffff'
+            ];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            firework.style.backgroundColor = color;
+            firework.style.boxShadow = `0 0 10px 2px ${color}`;
+            
+            document.body.appendChild(firework);
+            
+            const angle = (Math.random() - 0.5) * Math.PI / 2;
+            const velocity = 15 + Math.random() * 5;
+            const gravity = 0.15;
+            
+            let velocityX = velocity * Math.sin(angle);
+            let velocityY = velocity * Math.cos(angle);
+            let positionX = 0;
+            let positionY = 0;
+            
+            function animate() {
+                velocityY -= gravity;
+                positionX += velocityX;
+                positionY += velocityY;
+                
+                firework.style.left = (startX + positionX) + 'px';
+                firework.style.bottom = positionY + 'px';
+                
+                if (velocityY <= 0.5 && velocityY >= -0.5) {
+                    createSparkles(startX + positionX, window.innerHeight - positionY);
+                }
+                
+                if (positionY < 0) {
+                    firework.remove();
+                } else {
+                    requestAnimationFrame(animate);
+                }
+            }
+            
+            animate();
+        }
+
+        function createSparkles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'firework';
+                sparkle.style.left = x + 'px';
+                sparkle.style.top = y + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const velocity = 5 + Math.random() * 2;
+                const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                sparkle.style.backgroundColor = color;
+                sparkle.style.boxShadow = `0 0 10px 2px ${color}`;
+                
+                document.body.appendChild(sparkle);
+                
+                let velocityX = Math.cos(angle) * velocity;
+                let velocityY = Math.sin(angle) * velocity;
+                let life = 1;
+                
+                function animateSparkle() {
+                    velocityX *= 0.98;
+                    velocityY *= 0.98;
+                    life *= 0.96;
+                    
+                    x += velocityX;
+                    y += velocityY;
+                    
+                    sparkle.style.left = x + 'px';
+                    sparkle.style.top = y + 'px';
+                    sparkle.style.opacity = life;
+                    
+                    if (life > 0.1) {
+                        requestAnimationFrame(animateSparkle);
+                    } else {
+                        sparkle.remove();
+                    }
+                }
+                
+                animateSparkle();
+            }
+        }
+
+        setInterval(createFirework, 200);
+        
+        for(let i = 0; i < 5; i++) {
+            setTimeout(createFirework, i * 100);
+        }
+    </script>
+</body>
+</html>
